@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: cargolytics
+  name: cargolytics-service
+  namespace: cargolytics-dev
+spec:
+  ports:
+  - port: 8666
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: cargolytics
+    deployment: cargolytics
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: cargolytics
+  name: cargolytics
+  namespace: cargolytics-dev
+spec:
+  selector:
+    matchLabels:
+      app: cargolytics
+  template:
+    metadata:
+      labels:
+        app: cargolytics
+    spec:
+      containers:
+      - image: myimage
+        name: app
+        volumeMounts:
+        - mountPath: /config
+          name: config
+      volumes:
+      - configMap:
+          name: example-configmap-1
+        name: config

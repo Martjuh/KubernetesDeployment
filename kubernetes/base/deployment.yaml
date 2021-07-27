@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cargolytics
+  labels:
+    app: cargolytics
+spec:
+  selector:
+    matchLabels:
+      app: cargolytics
+  template:
+    metadata:
+      labels:
+        app: cargolytics
+    spec:
+      containers:
+      - name: app
+        image: myimage
+        volumeMounts:
+        - name: config
+          mountPath: /config
+      volumes:
+      - name: config
+        configMap:
+          name: example-configmap-1
